@@ -23,11 +23,7 @@ class Home extends Component {
             dtProduct: data
         })
     }
-    setText(key, str) {
-        this.setState({
-            [key]: str
-        })
-    }
+    
     showProduct() {
         if (this.state.dtProduct.length === 0) {
             return <ActivityIndicator size="large" />
