@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { Component } from 'react';
 import {
   Platform, StyleSheet, Text, View, AppRegistry, TextInput, Button, Alert, TouchableOpacity, AsyncStorage
@@ -5,26 +6,18 @@ import {
 import Style from './style/style'
 
 export default class Login extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-    this.state={
-      mail:'',password:''
+    this.state = {
+      mail: '', password: ''
     }
-    
   }
-   setText(key, string) {
+  setText(key, string) {
     this.setState({
-      [key]:string
+      [key]: string
     })
-   }
-   loginValidation(mail,password){
-      if(mail==="User@gmail.com" && password==="12345"){
-         this.props.navigation.navigate("TabView")
-         AsyncStorage.setItem("Login",'success')
-      }else{
-        Alert.alert('wrong mail or password')
-      }
-   }
+  }
+
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -32,21 +25,22 @@ export default class Login extends Component {
         <TextInput
           placeholder={"Input Mail"}
           style={Style.inputText}
-          onChangeText={(text)=>this.setText('mail',text)}
+          onChangeText={(text) => this.setText('mail', text)}
         />
         <Text>{this.state.text}</Text>
         <TextInput
           placeholder={"Input Password"}
+          secureTextEntry={true}
           style={Style.inputText}
-          onChangeText={(pw)=>this.setText('password',pw)}
+          onChangeText={pw => this.setText('password', pw)}
         />
         <Button
-          onPress={() =>  
-          this.loginValidation(this.state.mail,this.state.password)}
+          onPress={() => navigate('TabView')}
+          // this.loginValidation(this.state.mail,this.state.password)
           title="Sign In"
         />
         <Button
-          onPress={() =>navigate('Register')}
+          onPress={() => { navigate('Register') }}
           title="Register"
         />
       </View>

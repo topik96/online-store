@@ -1,37 +1,41 @@
+const axios = require('axios')
 import React from 'react'
 import { AsyncStorage } from 'react-native'
 import {
     View, Alert
 } from 'react-native'
 import {
-    Container, Header, Footer, Icon, Right, Button, Content, Tab, Tabs, Item, Input, Text, List, ListItem
+    Container, Header, Footer, Icon, Right, Body, Button, Content, Tab, Tabs, Item, Input, Text, List, ListItem, Left
 } from 'native-base'
 
 class Profile extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: ''
+            username: '', mail: '', phone: '', address: ''
         }
     }
-    // componentDidMount() {
-    //     this.setState({
-    //         name: 'Topik Mujianto'
-    //     })
-    // }
-    // fetchData() {
-    //     let response = await fetch('')
-    //     let json = await response.json()
-
-    // }
+    getData() {
+        axios.get('https://private-5b737-tokoonline2.apiary-mock.com/users/1')
+            .then(res => {
+                console.log(res.data[0].password)
+                this.setState({
+                    username: res.data[0].username,
+                    mail: res.data[0].email,
+                    phone: res.data[0].phone,
+                    address: res.data[0].address
+                })
+            })
+    }
+    componentDidMount() {
+        this.getData()
+    }
     render() {
         return (
             <View>
                 <Header>
                     <Right>
-                        <Button transparent onPress={() => {
-                            
-                        }}>
+                        <Button transparent onPress={() => this.getData()}>
                             <Text>Edit</Text>
                         </Button>
                     </Right>
@@ -39,26 +43,45 @@ class Profile extends React.Component {
                 </Header>
                 <List>
                     <ListItem>
-                        <Text>Name </Text>
-                        <Right><Text>Mujianto</Text></Right>
+                        <Left>
+                            <Text>Username </Text>
+                        </Left>
+                        <Right>
+                            <Text style={{ color: "blue" }}>{this.state.username}</Text>
+                        </Right>
                     </ListItem>
                     <ListItem>
-                        <Text>Mail </Text>
+                        <Left>
+                            <Text>email</Text>
+                        </Left>
+                        <Right>
+                            <Text style={{ color: "blue" }}>{this.state.mail}</Text>
+                        </Right>
                     </ListItem>
                     <ListItem>
-                        <Text>Phone </Text>
+                        <Left>
+                            <Text>phone </Text>
+                        </Left>
+                        <Right>
+                            <Text style={{ color: "blue" }}>{this.state.phone}</Text>
+                        </Right>
                     </ListItem>
                     <ListItem>
-                        <Text>Address </Text>
+                        <Left>
+                            <Text>address </Text>
+                        </Left>
+                        <Right>
+                            <Text style={{ color: "blue" }}>{this.state.address}</Text>
+                        </Right>
                     </ListItem>
-                    
-                        <Button block danger onPress={() => {
-                            this.props.navigation.navigate('Login')
-                            AsyncStorage.removeItem('Login')
-                        }}>
-                            <Text>Sign Out</Text>
-                        </Button>
-                    
+
+                    <Button block danger onPress={() => {
+                        this.props.navigation.navigate('Login')
+                        AsyncStorage.removeItem('Login')
+                    }}>
+                        <Text>Sign Out</Text>
+                    </Button>
+
                 </List>
 
             </View>

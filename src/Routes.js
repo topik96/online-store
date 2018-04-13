@@ -5,11 +5,12 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Cart from './pages/Cart'
 import Profile from './pages/Profile'
-import Indicator from './pages/Indicator'
+// import Indicator from './pages/Indicator'
 import TabView from './pages/TabView'
+import Checkout from './pages/Checkout'
 
 const Nav = StackNavigator({
-    IndicatorHome:{screen: Indicator},
+    // Indicator:{screen: Indicator},
     Login: { screen: Login, navigationOptions:{
         header:null
     }},
@@ -28,6 +29,10 @@ const Nav = StackNavigator({
     }},
     Cart:{screen:Cart,navigationOptions:{
         title:'Your Cart',
+        headerLeft:null
+    }},
+    Checkout:{screen:Checkout,navigationOptions:{
+        title:'Payment',
         headerLeft:null
     }}
 

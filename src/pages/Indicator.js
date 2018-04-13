@@ -1,6 +1,6 @@
 import React from 'react'
 import {ActivityIndicator, AsyncStorage} from 'react-native'
-class Indicator extends React.Component{
+export class Indicator extends React.Component{
     componentDidMount(){
     AsyncStorage.getItem('Login')
     .then(result=>{
@@ -12,7 +12,6 @@ class Indicator extends React.Component{
     })
     }
     render(){
-        console.log('coba')
         return(
            <ActivityIndicator
            size="large"
@@ -20,4 +19,3 @@ class Indicator extends React.Component{
         )
     }
 }
-export default Indicator

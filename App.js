@@ -8,7 +8,6 @@ import {
   Platform, StyleSheet, Text, View, AppRegistry, TextInput, Button, Alert
 } from 'react-native';
 import Nav from './src/Routes'
-
 export default class App extends Component {
   render() {
     return (
