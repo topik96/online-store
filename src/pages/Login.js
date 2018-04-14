@@ -35,12 +35,13 @@ export default class Login extends Component {
           onChangeText={pw => this.setText('password', pw)}
         />
         <Button
-          onPress={() => navigate('TabView')}
+          onPress={() => navigate('TabView') }
           // this.loginValidation(this.state.mail,this.state.password)
           title="Sign In"
         />
         <Button
-          onPress={() => { navigate('Register') }}
+          onPress={() => { navigate('Register') 
+          AsyncStorage.removeItem('item')}}
           title="Register"
         />
       </View>

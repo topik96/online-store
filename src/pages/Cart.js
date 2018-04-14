@@ -1,43 +1,60 @@
 import React from 'react'
 import {
-    View, TextInput, Alert, Image, Text, AsyncStorage
+    View, TextInput, Alert, Image, AsyncStorage, ScrollView
 } from 'react-native'
-import { Header,Button,Toast  } from 'native-base'
+import { Text, Header, Button, Toast, Thumbnail, ListItem, List, Body, Right, Left, Icon } from 'native-base'
 import { StackNavigator } from 'react-navigation'
-
-
+import ButtonCustom from '../components/ButtonCustom'
 export default class Cart extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            
+            qty:1
         }
     }
-    
+
     showCart() {
-        if(this.props.items!== null){
+        if (this.props.items !== null) {
+            let total = 0
             return this.props.items.map((item) => {
-                return  <Text key={item.id}> {item.name} {item.price}</Text>
+    
+                let qty = this.state.qty
+                total += item.price
+                return <View>
+                    <ListItem>
+                        <Body>
+                            <Text>{item.name}</Text>
+                            <Text note>{item.price}</Text>
+                            <Text note>{total}</Text></Body>
+                        <Right>
+                            <ButtonCustom />
+                        </Right>
+                    </ListItem>
+                </View>
             })
-        }else {
+        } else {
             return <Text>No items selected</Text>
         }
-        
+
     }
     render() {
-        console.log("===================================", this.props.items)
+        console.log("===================================", this.state.qty)
         return (
             <View>
                 <Header>
-                </Header>
-                {this.showCart()}
-                <Button block primary onPress={()=>{
-                    this.props.navigation.navigate('Checkout')
-                    AsyncStorage.removeItem('item')
-                    
+                    <Right>
+                    <Button transparent danger onPress={() => {
+                        this.props.navigation.navigate('Checkout')
+                        AsyncStorage.removeItem('item')
                     }}>
-                    <Text>Checkout</Text>
-                </Button>
+                        <Icon name='ios-cart' />
+                        <Text>Checkout</Text>
+                    </Button>
+                    </Right>
+                </Header>
+                <ScrollView>
+                    {this.showCart()}
+                </ScrollView>
             </View>
         )
     }
