@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react'
 import {
     Platform, Image, StyleSheet, View, AppRegistry, ActivityIndicator, TextInput, Alert, ScrollView, AsyncStorage
@@ -16,12 +15,11 @@ export default class Home extends Component {
             nmPoduct: '',
             dtProduct: [],
             items: [],
-            isBuy: true
+            
         }
     }
 
     UNSAFE_componentWillMount() {
-        AsyncStorage.removeItem('item')
         this.fetchData().done()
         AsyncStorage.getItem('item').then(res => {
             if (res == null) console.log('kosong bray')
@@ -40,23 +38,6 @@ export default class Home extends Component {
             dtProduct: data
         })
     }
-    // addItems(id,nm,prc){
-    //    if(this.state.items.length>=1){
-    //        let idFromLocalStorage =  this.state.items.map(item=>{
-    //             if(id==item.id){
-    //                 return 'item sudah ditambahkan'
-    //             }else{
-    //                 return 'item akan ditambahkan'
-    //             }
-    //         })
-    //         console.log(idFromLocalStorage)
-    //    }else{
-    //      var add = this.state.items.push({'id':id,'name':nm,'price':prc})
-    //       return add
-    //    }
-    //AsyncStorage.setItem('item',JSON.stringify(add))
-    // console.log('id from '+id + ' is added')
-    // }
 showProduct() {
     if (this.state.dtProduct.length === 0) {
         return <ActivityIndicator size="large" />
