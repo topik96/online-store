@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Style from './style/style'
 import {AsyncStorage} from 'react-native'
 import { Container, Header, Button, Footer,Icon, Content, Tab, Tabs, Item, Input, Text } from 'native-base'
-import TabProducts from './Home'
+import TabProducts from './showProducts'
 import TabCart from './Cart'
 import TabProfile from './Profile'
 
@@ -16,10 +16,10 @@ export default class TabView extends Component {
   
 
   getItem(){
-    AsyncStorage.getItem('item')
-    .then((res)=>{
+    AsyncStorage.getItem('itemInCart')
+    .then((resData)=>{
         this.setState({
-            items: JSON.parse(res)
+            items: JSON.parse(resData)
         })
     })
   }

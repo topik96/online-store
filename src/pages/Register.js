@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { Component } from 'react';
 import {
-    Platform, StyleSheet, Text, View, AppRegistry, TextInput, Button, Alert, TouchableOpacity
+    Platform, StyleSheet, Text, View, AppRegistry, TextInput, Button, Alert, TouchableOpacity,AsyncStorage
 } from 'react-native';
 import Style from './style/style'
+
 
 export default class Register extends Component {
     constructor(props) {
@@ -56,7 +57,8 @@ export default class Register extends Component {
                     />
                 <Button
                     onPress={()=>{
-                        this.sendDataUser()
+                       // this.sendDataUser()
+                       
                     }}
                     title="Register"
                 />

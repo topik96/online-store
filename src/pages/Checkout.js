@@ -1,35 +1,48 @@
 import React from 'react'
-import {View,Alert} from 'react-native'
+import { View, Alert } from 'react-native'
 import {
-    ListItem,Thumbnail, Body,List,Content,Text,Button,Right
+    ListItemBody, List, Content, Text, Button, Right, Left, Card, CardItem, Body, Container, Header, Icon, Title,Item,Input
 } from 'native-base'
-export default class Checkout extends React.Component{
-    render(){
-        return(
-            <View>
-                <List>
-                    <ListItem style={{backgroundColor:'white'}} onLongPress={()=>{
-                            Alert.alert('bjbj')
-                        }}>
-                        <Thumbnail 
-                        square 
-                        size={200} 
-                        source={{uri: 'https://www.ishopperu.com.pe/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/i/p/iphone_8_plus_gold_1.png'}}
-                        />
-                        
-                        <Body>
-                            <Text>iPhone8</Text>
-                            <Text note>Gold, 32GB, 15MegaPixel</Text>
-                            <Text note>$999</Text>
-                        </Body>
-                        <Right>
-                            <Button transparent>
-                                <Text>Buy</Text>
+export default class Checkout extends React.Component {
+    componentWillMount(){
+        
+    }
+    
+    render() {
+        return (
+            <Container>
+                <Header>
+                    <Left>
+                        <Button transparent>
+                            <Icon name="arrow-back" />
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title>Payment</Title>
+                    </Body>
+                    <Right />
+                </Header>
+                <Content padder>
+                    <Card>
+                        <CardItem bordered header>
+                            <Text>Dear Customer</Text>
+                        </CardItem>
+                        <CardItem bordered>
+                            <Body>
+                                <Text>Please make your payment of <Text style={{fontWeight:'bold'}}>$10000</Text></Text>
+                                <Item>
+                                    <Input placeholder="Input bank account" />
+                                </Item>
+                            </Body>
+                        </CardItem>
+                        <CardItem footer>
+                            <Button full primary>
+                                <Text>                           Submit                             </Text>
                             </Button>
-                        </Right>
-                    </ListItem>
-                </List>
-            </View>
+                        </CardItem>
+                    </Card>
+                </Content>
+            </Container>
         )
     }
 }

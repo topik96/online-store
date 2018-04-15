@@ -2,7 +2,7 @@ import React from 'react'
 import {ActivityIndicator, AsyncStorage} from 'react-native'
 export class Indicator extends React.Component{
     componentDidMount(){
-    AsyncStorage.getItem('Login')
+    AsyncStorage.getItem('login')
     .then(result=>{
         if(result===null){
             setTimeout(()=>this.props.navigation.navigate('Login'), 1000) 

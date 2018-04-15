@@ -9,12 +9,28 @@ export default class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      mail: '', password: ''
+      mail: '', password: '', token:''
     }
   }
   setText(key, string) {
     this.setState({
       [key]: string
+    })
+  }
+
+  loginValidation(){
+    axios.post('',{
+      email:this.state.email,
+      password:this.state.password
+    })
+    .then(res=>{
+      this.setState({
+        token:res.data
+      })
+      AsyncStorage.setItem('authorization',token)
+      .then(res=>{
+        console('token is saved')
+      })
     })
   }
 
@@ -25,25 +41,23 @@ export default class Login extends Component {
         <TextInput
           placeholder={"Input Mail"}
           style={Style.inputText}
-          onChangeText={(text) => this.setText('mail', text)}
-        />
+          onChangeText={(text) => this.setText('mail', text)}/>
         <Text>{this.state.text}</Text>
         <TextInput
           placeholder={"Input Password"}
           secureTextEntry={true}
           style={Style.inputText}
-          onChangeText={pw => this.setText('password', pw)}
-        />
+          onChangeText={pw => this.setText('password', pw)}/>
         <Button
-          onPress={() => navigate('TabView') }
-          // this.loginValidation(this.state.mail,this.state.password)
-          title="Sign In"
-        />
+          onPress={() => {
+            navigate('TabView')
+            AsyncStorage.setItem('login','success')
+          }}
+          title="Sign In"/>
         <Button
           onPress={() => { navigate('Register') 
-          AsyncStorage.removeItem('item')}}
-          title="Register"
-        />
+          AsyncStorage.removeItem('itemInCart')}}
+          title="Register"/>
       </View>
     )
   }

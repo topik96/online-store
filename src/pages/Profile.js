@@ -46,38 +46,38 @@ class Profile extends React.Component {
                         <Left>
                             <Text>Username </Text>
                         </Left>
-                        <Right>
+                        <Body>
                             <Text style={{ color: "blue" }}>{this.state.username}</Text>
-                        </Right>
+                        </Body>
                     </ListItem>
                     <ListItem>
                         <Left>
                             <Text>email</Text>
                         </Left>
-                        <Right>
-                            <Text style={{ color: "blue" }}>{this.state.mail}</Text>
-                        </Right>
+                        <Body>
+                            <Text style={{ color: "blue",marginLeft:10 }}>{this.state.mail}</Text>
+                        </Body>
                     </ListItem>
                     <ListItem>
                         <Left>
                             <Text>phone </Text>
                         </Left>
-                        <Right>
+                        <Body>
                             <Text style={{ color: "blue" }}>{this.state.phone}</Text>
-                        </Right>
+                        </Body>
                     </ListItem>
                     <ListItem>
                         <Left>
                             <Text>address </Text>
                         </Left>
-                        <Right>
+                        <Body>
                             <Text style={{ color: "blue" }}>{this.state.address}</Text>
-                        </Right>
+                        </Body>
                     </ListItem>
 
                     <Button block danger onPress={() => {
                         this.props.navigation.navigate('Login')
-                        AsyncStorage.removeItem('Login')
+                        AsyncStorage.removeItem('login')
                     }}>
                         <Text>Sign Out</Text>
                     </Button>
