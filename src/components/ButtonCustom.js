@@ -1,36 +1,41 @@
-import React,{Component} from 'React'
-import {Button} from 'native-base'
-import {View, Text} from 'react-native'
-export default class ButtonCustom extends Component{
-    constructor(props){
+import React, { Component } from 'React'
+import { Button } from 'native-base'
+import { View, Text } from 'react-native'
+import Cart from '../pages/Cart'
+class ButtonCustom extends Component {
+    constructor(props) {
         super(props)
-        this.state={
-            quantity:this.props.quantity
+        this.state = {
+            quantity: 1
         }
     }
-    increment(){
+
+    increment() {
         this.setState({
-            quantity:this.state.quantity+1
+            quantity: this.state.quantity + 1
         })
     }
 
-    decrement(){
-        this.setState({
-            quantity:this.state.quantity-1
-        })
+    decrement() {
+        if(this.state.quantity>1){
+            this.setState({
+                quantity: this.state.quantity - 1
+            })
+        }
     }
 
-    render(){
-        return(
-            <View>
-                <Button transparent onPress={()=>this.increment()}>
-                    <Text style={{color:'blue',fontSize:15}}>
+    render() {
+
+        return (
+            <View style={{ marginRight: 20 }}>
+                <Button transparent onPress={() => this.increment()}>
+                    <Text style={{ color: 'blue', fontSize: 15 }}>
                         +
                     </Text>
                 </Button>
-                <Text>1</Text>
-                <Button transparent onPress={()=>this.decrement()}>
-                    <Text style={{color:'blue'}}>
+                <Text>{this.state.quantity}</Text>
+                <Button transparent onPress={() => this.decrement() }>
+                    <Text style={{ color: 'blue' }}>
                         -
                     </Text>
                 </Button>
@@ -38,3 +43,4 @@ export default class ButtonCustom extends Component{
         )
     }
 }
+export default ButtonCustom
