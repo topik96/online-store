@@ -14,6 +14,9 @@ export default class TabView extends Component {
     }
   }
   
+  componentDidMount(){
+    this.getItem()
+  }
 
   getItem(){
     AsyncStorage.getItem('itemInCart')
@@ -23,9 +26,10 @@ export default class TabView extends Component {
         })
     })
   }
-
+  
   render() {
-    console.log('ini tab ',this.props.navigation)
+    console.log('get item'+this.state.items)
+    // console.log('ini asyn item', this.getItem())//
     return (
       <Container>
         <Tabs initialPage={0} tabBarPosition="overlayBottom" onChangeTab={()=>

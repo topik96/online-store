@@ -12,30 +12,36 @@ class Profile extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            username: '', mail: '', phone: '', address: ''
+            username: '', mail: '', phone: '', address: '',id:''
         }
     }
-    getData() {
-        axios.get('https://private-5b737-tokoonline2.apiary-mock.com/users/1')
+    componentWillMount(){
+        AsyncStorage.getItem('id')
+        .then(res=>{
+            console.log (res)
+            this.setState({
+                id:res
+            })
+        })
+        axios.get(`http://192.168.100.41:5000/api/users/54`)
             .then(res => {
-                console.log(res.data[0].password)
-                this.setState({
-                    username: res.data[0].username,
-                    mail: res.data[0].email,
-                    phone: res.data[0].phone,
-                    address: res.data[0].address
-                })
+                console.log(res )
+                // console.log(res.data.id)
+                // this.setState({
+                //     username: res.data.username,
+                //     mail: res.data.email,
+                //     phone: res.data.phone,
+                //     address: res.data.address
+                // })
             })
     }
-    componentDidMount() {
-        this.getData()
-    }
+
     render() {
         return (
             <View>
                 <Header>
                     <Right>
-                        <Button transparent onPress={() => this.getData()}>
+                        <Button transparent onPress={() => this.navigation.navigate('EditProfile')}>
                             <Text>Edit</Text>
                         </Button>
                     </Right>

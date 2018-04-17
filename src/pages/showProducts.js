@@ -16,7 +16,7 @@ export default class ShowProducts extends React.Component {
         }
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.fetchData().done()
         AsyncStorage.getItem('itemInCart')
             .then(resData => {
@@ -28,7 +28,6 @@ export default class ShowProducts extends React.Component {
                     })
                 }
             })
-
     }
 
     async fetchData() {
@@ -40,21 +39,20 @@ export default class ShowProducts extends React.Component {
         })
     }
 
-    findId(id, name, price) {
+    findId(id, name, price,qty) {
         let a = this.state.tempCart.find(arr => {
             return arr.id == id
         })
         if (a) {
             console.log('item is added to cart')
         } else {
-            this.state.tempCart.push({ 'id': id, 'name': name, 'price': price })
+            this.state.tempCart.push({ 'id': id, 'name': name, 'price': price,'quantity':qty })
             AsyncStorage.setItem('itemInCart', JSON.stringify(this.state.tempCart))
                 .then(res => {
                     console.log('added to local storage')
                 })
         }
     }
-
     showProducts() {
         if (this.state.dataProducts.length === 0) {
             return <ActivityIndicator size='large' />
@@ -66,15 +64,16 @@ export default class ShowProducts extends React.Component {
                             <ListItem style={{ backgroundColor: 'white' }} onLongPress={() => {
                                 Alert.alert('Loading Image...')
                             }}>
-                                <Thumbnail square size={80} source={{ uri: item.image }} />
+                                <Thumbnail square size={80} source={{ uri: "https://cdn.pixabay.com/photo/2013/04/06/11/50/image-editing-101040_960_720.jpg" }} />
                                 <Body>
                                     <Text>{item.name}</Text>
                                     <Text note>{item.description}</Text>
-                                    <Text note>${item.price}</Text>
+                                 <Text note>${item.price}</Text>
                                 </Body>
                                 <Right>
                                     <Button transparent disabled={this.state.isBuy} onPress={() => {
-                                        this.findId(item.id, item.name, item.price)
+                                        this.findId(item.id, item.name, item.price,1)
+                                
                                         Toast.show({
                                             text: "Added to cart",
                                             position: "top",
