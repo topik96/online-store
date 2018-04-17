@@ -5,17 +5,17 @@ import {
 import { Text, Header, Button, Toast, Thumbnail, ListItem, List, Body, Right, Left, Icon, Item, Input } from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import ButtonCustom from '../components/ButtonCustom'
+import CartList from '../pages/CartList'
 export default class Cart extends React.Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
-            cart: [], total: [], qty: 1, subTotal: () => { }, sub: []
-            // subTotal:()=>{ return this.props}
+            cart: [], total: [], qty: 1, 
         }
+        this.getSubTotal = this.getSubTotal.bind(this)
     }
 
     componentWillMount() {
-        console.log('1')
         this.setState({
             cart: this.props.items
         })
@@ -30,48 +30,25 @@ export default class Cart extends React.Component {
     showCart() {
         if (this.props.items !== null) {
             return this.props.items.map((item) => {
-                console.log('showcart' + item)
-                let subTotal = 0
-                return <List key={item.id}>
-                    <ListItem onLongPress={() => {
-                        Alert.alert(
-                            'Confirm',
-                            'Delete item',
-                            [
-                              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                              {text: 'OK', onPress: () => console.log('OK Pressed')},
-                            ],
-                            { cancelable: false }
-                          )
-                    }}>
-                        <Right>
-                            <Item>
-                                <Input placeholder='qty?' onChangeText={(qty) => {
-                                    this.setState({
-
-                                    })
-
-                                }}>
-                                </Input>
-                            </Item>
-                        </Right>
-                        <Body>
-                            <Text>{item.name}</Text>
-                            <Text note color={'black'}>${item.price}</Text>
-                            <Text note>Sub Total : ${this.state.sub[item.id]}</Text>
-                        </Body>
-
-                    </ListItem>
-                </List>
+                return <CartList item={item} key={item.id} getSubTotal={this.getSubTotal}/>
             })
         } else {
             return <Text>No items selected</Text>
         }
     }
+
+    getSubTotal(data) {
+        this.state.total.push(data)
+        this.setState({
+            total: [...this.state.total]
+        })
+
+        console.log('ini data total',this.state.total)
+        console.log("ini total", this.state.total.reduce((a,b)=>a+b))
+        
+    }
     render() {
-        console.log(this.state.total)
-        console.log('this function ' + this.showCart())
-        console.log('ini state' + this.state.cart)
+        console.log('iini state total',typeof this.state.total)
         return (
             <View>
                 <Header>
@@ -86,7 +63,7 @@ export default class Cart extends React.Component {
                 </Header>
                 <ScrollView>
                     {this.showCart()}
-                    <Text style={{ marginRight: 10 }}>Total Paid : $20000</Text>
+                    <Text style={{ marginRight: 10 }}>Total Paid : {this.state.total.length > 0 ? this.state.total.reduce((a,b)=>a+b) : 0}</Text>
                 </ScrollView>
             </View>
         )
