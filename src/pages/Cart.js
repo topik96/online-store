@@ -9,12 +9,10 @@ export default class Cart extends React.Component {
     constructor() {
         super()
         this.state = {
-            cart: [], total: [], qty: 1
+            cart: [], total: [], qty: 1, subTotal: () => { }, sub: []
             // subTotal:()=>{ return this.props}
         }
     }
-
-   
 
     componentWillMount() {
         console.log('1')
@@ -23,27 +21,36 @@ export default class Cart extends React.Component {
         })
     }
     total() {
-        if(this.props.items !== null){
-            for(let a=0;a<this.props.items;a++){
+        if (this.props.items !== null) {
+            for (let a = 0; a < this.props.items; a++) {
                 return this.props.items[a].id
             }
         }
     }
     showCart() {
-        this.total()
-        
         if (this.props.items !== null) {
             return this.props.items.map((item) => {
                 console.log('showcart' + item)
-                let subTotal = 0 
+                let subTotal = 0
                 return <List key={item.id}>
                     <ListItem onLongPress={() => {
-                        Alert.alert('delete')
+                        Alert.alert(
+                            'Confirm',
+                            'Delete item',
+                            [
+                              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                              {text: 'OK', onPress: () => console.log('OK Pressed')},
+                            ],
+                            { cancelable: false }
+                          )
                     }}>
-                        `<Right>
+                        <Right>
                             <Item>
                                 <Input placeholder='qty?' onChangeText={(qty) => {
-                                    return subTotal = item.price * qty
+                                    this.setState({
+
+                                    })
+
                                 }}>
                                 </Input>
                             </Item>
@@ -51,7 +58,7 @@ export default class Cart extends React.Component {
                         <Body>
                             <Text>{item.name}</Text>
                             <Text note color={'black'}>${item.price}</Text>
-                            <Text note>Sub Total : ${subTotal}</Text>
+                            <Text note>Sub Total : ${this.state.sub[item.id]}</Text>
                         </Body>
 
                     </ListItem>
