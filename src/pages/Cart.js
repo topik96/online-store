@@ -6,51 +6,65 @@ import { Text, Header, Button, Toast, Thumbnail, ListItem, List, Body, Right, Le
 import { StackNavigator } from 'react-navigation'
 import ButtonCustom from '../components/ButtonCustom'
 export default class Cart extends React.Component {
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
         this.state = {
-            qty: 2,
-            total: 0
+            cart: [], total: [], qty: 1
+            // subTotal:()=>{ return this.props}
         }
     }
 
-    deleteItem() {
+   
 
+    componentWillMount() {
+        console.log('1')
+        this.setState({
+            cart: this.props.items
+        })
     }
-
+    total() {
+        if(this.props.items !== null){
+            for(let a=0;a<this.props.items;a++){
+                return this.props.items[a].id
+            }
+        }
+    }
     showCart() {
-        let total = 0
+        this.total()
+        
         if (this.props.items !== null) {
             return this.props.items.map((item) => {
+                console.log('showcart' + item)
+                let subTotal = 0 
                 return <List key={item.id}>
-                    <ListItem onLongPress={()=>{
+                    <ListItem onLongPress={() => {
                         Alert.alert('delete')
                     }}>
+                        `<Right>
+                            <Item>
+                                <Input placeholder='qty?' onChangeText={(qty) => {
+                                    return subTotal = item.price * qty
+                                }}>
+                                </Input>
+                            </Item>
+                        </Right>
                         <Body>
                             <Text>{item.name}</Text>
                             <Text note color={'black'}>${item.price}</Text>
-                            <Text note>Sub Total : ${item.price * this.state.qty}</Text>
-                            <Button key={item.id} style={{ alignContent: 'center' }} transparent onPress={() => {
-                                this.props.items.pop()
-                            }}>
-                                <Text>Delete</Text>
-                            </Button>
+                            <Text note>Sub Total : ${subTotal}</Text>
                         </Body>
-                        <Right>
-                            <ButtonCustom />
-                        </Right>
 
                     </ListItem>
-
                 </List>
             })
-
         } else {
             return <Text>No items selected</Text>
         }
     }
     render() {
-        console.log("===================================" + this.state.total)
+        console.log(this.state.total)
+        console.log('this function ' + this.showCart())
+        console.log('ini state' + this.state.cart)
         return (
             <View>
                 <Header>
@@ -63,9 +77,9 @@ export default class Cart extends React.Component {
                         </Button>
                     </Right>
                 </Header>
-
                 <ScrollView>
                     {this.showCart()}
+                    <Text style={{ marginRight: 10 }}>Total Paid : $20000</Text>
                 </ScrollView>
             </View>
         )
