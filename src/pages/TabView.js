@@ -28,8 +28,7 @@ export default class TabView extends Component {
   }
   
   render() {
-    console.log('get item'+this.state.items)
-    // console.log('ini asyn item', this.getItem())//
+    console.log(this.state.items)  
     return (
       <Container>
         <Tabs initialPage={0} tabBarPosition="overlayBottom" onChangeTab={()=>

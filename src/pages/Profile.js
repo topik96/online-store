@@ -1,99 +1,162 @@
-const axios = require('axios')
-import React from 'react'
-import { AsyncStorage } from 'react-native'
+import React, { Component } from 'react'
+import axios from 'axios'
 import {
-    View, Alert
-} from 'react-native'
-import {
-    Container, Header, Footer, Icon, Right, Body, Button, Content, Tab, Tabs, Item, Input, Text, List, ListItem, Left
+    Container,
+    Header,
+    Content,
+    Form,
+    Item,
+    Input,
+    Label,
+    Button,
+    Text,
+    Body,
+    Right,
+    Left,
+    Icon
 } from 'native-base'
-
-class Profile extends React.Component {
-    constructor(props) {
-        super(props)
+import { AsyncStorage } from 'react-native'
+export default class Profile extends Component {
+    constructor() {
+        super()
         this.state = {
-            username: '', mail: '', phone: '', address: '',id:''
+            id: 54,
+            email:'',
+            username: '',
+            name: '',
+            password: '',
+            phone: '',
+            address: '',
+            disableInput: true
         }
     }
-    componentWillMount(){
-        AsyncStorage.getItem('id')
-        .then(res=>{
-            console.log (res)
-            this.setState({
-                id:res
-            })
-        })
-        axios.get(`http://192.168.100.41:5000/api/users/54`)
+   UNSAFE_componentWillMount() {
+        console.log('============================================ID')
+        axios.get(`http://192.168.100.29:5000/api/users/${this.state.id}`)
             .then(res => {
-                console.log(res )
-                // console.log(res.data.id)
-                // this.setState({
-                //     username: res.data.username,
-                //     mail: res.data.email,
-                //     phone: res.data.phone,
-                //     address: res.data.address
-                // })
+                this.setState({
+                    username: res.data[0].username,
+                    email:res.data[0].email,
+                    password: res.data[0].password,
+                    phone: res.data[0].phone,
+                    address: res.data[0].address
+                })
+                console.log(res.data[0].password+'========================================')
             })
+    }
+
+    putData() {
+        axios.put(`http://192.168.100.29:5000/api/users/${this.state.id}/update`, {
+            username: this.state.username,
+            password: this.state.password,
+            phone: this.state.phone,
+            address: this.state.address
+        })
+        .then(res=>{
+            console.log(res)
+        })
+    }
+
+    editData(dis) {
+        if (dis === true) {
+            return <Button full danger onPress={() => {
+                AsyncStorage.removeItem('totalPaid')
+                AsyncStorage.removeItem('idUser')
+                AsyncStorage.removeItem('login')
+                AsyncStorage.removeItem('itemInCart')
+                this.props.navigation.navigate('Login')
+            }}>
+                <Text>Logout</Text>
+            </Button>
+
+        } else {
+            return <Button primary block onPress={() => {
+                this.putData(this.state.id)
+                this.setState({
+                    disableInput: true
+                })
+            }}>
+                <Text>Submit</Text>
+            </Button>
+
+        }
     }
 
     render() {
         return (
-            <View>
+            <Container>
                 <Header>
+                    <Text>Profile</Text>
                     <Right>
-                        <Button transparent onPress={() => this.navigation.navigate('EditProfile')}>
+                        <Button transparent onPress={() => {
+                            this.setState({
+                                disableInput: false
+                            })
+                        }}>
                             <Text>Edit</Text>
                         </Button>
                     </Right>
-
                 </Header>
-                <List>
-                    <ListItem>
-                        <Left>
-                            <Text>Username </Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ color: "blue" }}>{this.state.username}</Text>
-                        </Body>
-                    </ListItem>
-                    <ListItem>
-                        <Left>
-                            <Text>email</Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ color: "blue",marginLeft:10 }}>{this.state.mail}</Text>
-                        </Body>
-                    </ListItem>
-                    <ListItem>
-                        <Left>
-                            <Text>phone </Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ color: "blue" }}>{this.state.phone}</Text>
-                        </Body>
-                    </ListItem>
-                    <ListItem>
-                        <Left>
-                            <Text>address </Text>
-                        </Left>
-                        <Body>
-                            <Text style={{ color: "blue" }}>{this.state.address}</Text>
-                        </Body>
-                    </ListItem>
-
-                    <Button block danger onPress={() => {
-                        this.props.navigation.navigate('Login')
-                        AsyncStorage.removeItem('login')
-                    }}>
-                        <Text>Sign Out</Text>
-                    </Button>
-
-                </List>
-
-            </View>
-
+                <Content>
+                    <Form>
+                        <Item floatingLabel>
+                            <Label>Name</Label>
+                            <Input value="Topikmuj" autoCapitalize='none' disabled={this.state.disableInput} />
+                        </Item>
+                        <Item floatingLabel>
+                            <Label>Username</Label>
+                            <Input defaultValue="Topikmuj" autoCapitalize='none' disabled={this.state.disableInput} value={this.state.username} 
+                            onChangeText={(txt)=>{
+                                this.setState({
+                                    username:txt
+                                })
+                            }} />
+                        </Item>
+                        <Item floatingLabel last>
+                            <Label>Email</Label>
+                            <Input autoCapitalize='none' disabled={this.state.disableInput} value={this.state.email}
+                             onChangeText={(txt)=>{
+                                this.setState({
+                                email:txt
+                                })
+                            }}
+                            
+                            />
+                        </Item>
+                        <Item floatingLabel last>
+                            <Label>Password</Label>
+                            <Input secureTextEntry autoCapitalize='none' disabled={this.state.disableInput} value={this.state.password}
+                             onChangeText={(txt)=>{
+                                this.setState({
+                                    password:txt
+                                })
+                            }}
+                            />
+                        </Item>
+                        <Item floatingLabel last>
+                            <Label>Phone</Label>
+                            <Input keyboardType='numeric' maxLength={13} disabled={this.state.disableInput} value={this.state.phone}
+                             onChangeText={(txt)=>{
+                                this.setState({
+                                    phone:txt
+                                })
+                            }}
+                            />
+                        </Item>
+                        <Item floatingLabel last>
+                            <Label>Address</Label>
+                            <Input disabled={this.state.disableInput} value={this.state.address} 
+                             onChangeText={(txt)=>{
+                                this.setState({
+                                    address:txt
+                                })
+                            }}
+                            />
+                        </Item>
+                    </Form>
+                </Content>
+                {this.editData(this.state.disableInput)}
+            </Container>
         )
     }
 }
-//username password email address phone 
-export default Profile

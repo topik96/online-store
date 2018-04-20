@@ -2,8 +2,9 @@ import axios from 'axios'
 import React from 'react'
 import { View, Alert, ScrollView, ActivityIndicator, image, AsyncStorage } from 'react-native'
 import {
-    ListItem, Thumbnail, Body, List, Content, Text, Button, Right, Header, Input, Icon, Item, Toast, Card,CardItem
+    ListItem, Thumbnail, Body, List, Content, Text, Button, Right, Header, Input, Icon, Item, Toast, Card, CardItem
 } from 'native-base'
+import ButtonQuantity from '../components/ButtonaQuantity'
 export default class ShowProducts extends React.Component {
     constructor(props) {
         super(props)
@@ -13,7 +14,9 @@ export default class ShowProducts extends React.Component {
             showToast: false,
             productName: '',
             stock: 0,
+            quantity: 1
         }
+        this.getQTY = this.getQTY.bind(this)
     }
 
     UNSAFE_componentWillMount() {
@@ -39,20 +42,47 @@ export default class ShowProducts extends React.Component {
         })
     }
 
-    findId(id, name, price,qty) {
+    getQTY(qty, id) {
+        this.state.dataProducts.find(item => {
+            return item.id === id
+        }).quantity = qty
+        this.setState({
+            quantity: [...this.state.dataProducts]
+        })
+
+    }
+
+    showToast(message, duration, type) {
+        Toast.show({
+            text: message,
+            position: "top",
+            type: type,
+            buttonText: "X",
+            duration: duration
+        })
+    }
+
+    findId(id, name, price, qty) {
         let a = this.state.tempCart.find(arr => {
             return arr.id == id
         })
         if (a) {
             console.log('item is added to cart')
         } else {
-            this.state.tempCart.push({ 'id': id, 'name': name, 'price': price,'quantity':qty })
-            AsyncStorage.setItem('itemInCart', JSON.stringify(this.state.tempCart))
-                .then(res => {
-                    console.log('added to local storage')
-                })
+            console.log(qty + ' fiebifebfiebeifbeif')
+            if (qty != undefined) {
+                console.log(qty + ' fiebifebfiebeifbeif')
+                this.state.tempCart.push({ 'id': id, 'name': name, 'price': price, 'quantity': qty })
+                AsyncStorage.setItem('itemInCart', JSON.stringify(this.state.tempCart))
+                    .then(res => {
+                        this.showToast('Added to cart', 2000, 'primary')
+                    })
+            } else {
+                this.showToast('Add quantity', 1000,'danger')
+            }
         }
     }
+
     showProducts() {
         if (this.state.dataProducts.length === 0) {
             return <ActivityIndicator size='large' />
@@ -68,22 +98,17 @@ export default class ShowProducts extends React.Component {
                                 <Body>
                                     <Text>{item.name}</Text>
                                     <Text note>{item.description}</Text>
-                                 <Text note>${item.price}</Text>
-                                </Body>
-                                <Right>
-                                    <Button transparent disabled={this.state.isBuy} onPress={() => {
-                                        this.findId(item.id, item.name, item.price,1)
-                                
-                                        Toast.show({
-                                            text: "Added to cart",
-                                            position: "top",
-                                            type: "primary",
-                                            buttonText: "X",
-                                            duration: 3000
-                                        })
+                                    <Text note>${item.price}</Text>
+                                    <Button transparent onPress={() => {
+                                        this.findId(item.id, item.name, item.price, item.quantity)
+
                                     }}>
                                         <Text>Buy</Text>
                                     </Button>
+                                </Body>
+
+                                <Right>
+                                    <ButtonQuantity quantity={this.getQTY} id={item.id} />
                                 </Right>
                             </ListItem>
                         </List>
@@ -96,13 +121,17 @@ export default class ShowProducts extends React.Component {
     alertFoundItem() {
         if (this.state.productName !== '') {
             return <CardItem bordered>
-                <Text style={{fontWeight:'bold'}}>Results :
+                <Text style={{ fontWeight: 'bold' }}>Results :
             <Text style={{ color: 'blue', fontWeight: 'bold' }}> {this.state.productName}</Text></Text>
             </CardItem>
         }
     }
 
     render() {
+
+        this.state.dataProducts.map(item => {
+            console.log('id :', item.id, ' qty: ', item.quantity)
+        })
         console.log(this.state.tempCart)
         return (
             <View>
