@@ -6,38 +6,32 @@ class ButtonCustom extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            quantity: 1,sendQTY
+            quantity: 0
         }
     }
     componentWillMount() {
-        console.log('dfdfdfdfd' + this.props.qty)
+        console.log(this.state.quantity)
     }
     increment() {
         this.setState({
             quantity: this.state.quantity + 1
         })
+        this.props.quantity(this.state.quantity + 1, this.props.id)
     }
     decrement() {
-        if (this.state.quantity > 1) {
+        if (this.state.quantity > 0) {
             this.setState({
                 quantity: this.state.quantity - 1
             })
         }
+        this.props.quantity(this.state.quantity - 1, this.props.id)
     }
-    setQTY(newValue){
-        this.setState({
-            sendQTY:newValue
-        })
-    }
-
     render() {
-        
-        const { navigate } = this.props.navigation
+        console.log(' from bqty' + this.state.quantity)
         return (
             <View>
                 <Button transparent onPress={() => {
                     this.increment()
-                    this.setQTY(this.state.quantity)
                 }}>
                     <Text style={{ color: 'blue', fontSize: 15 }}>
                         +</Text>
@@ -45,7 +39,6 @@ class ButtonCustom extends Component {
                 <Text>{this.state.quantity}</Text>
                 <Button transparent onPress={() => {
                     this.decrement()
-                    this.setQTY(this.state.quantity)
                 }} >
                     <Text style={{ color: 'blue' }}>
                         -</Text>
