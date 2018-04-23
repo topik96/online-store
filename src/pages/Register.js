@@ -1,10 +1,11 @@
 import axios from 'axios'
 import React, { Component } from 'react';
 import {
-    Platform, StyleSheet, Text, View, AppRegistry, TextInput, Button, Alert, TouchableOpacity, AsyncStorage
+    Platform, StyleSheet, Text, View, Alert, AsyncStorage
 } from 'react-native';
+import Icon from 'react-native-vector-icons'
+import { Item, Container, Form, Input, Button, Content, Label } from 'native-base'
 import Style from './style/style'
-
 export default class Register extends Component {
     constructor(props) {
         super(props)
@@ -18,52 +19,65 @@ export default class Register extends Component {
         })
     }
     sendDataUser() {
-        
-        const dataUser = {
-            username: this.state.username,
-            email: this.state.mail,
-            password: this.state.pass
-        }
-        console.log(this.state)
-        axios.post('http://192.168.100.15:5000/api/user', dataUser)
+        let validateEmail = /\S+@\S+\.\S+/.test(this.state.email);
+        if (validateEmail){
+            this.props.navigation.navigate('Login')
+            const dataUser = {
+                username: this.state.username,
+                email: this.state.mail,
+                password: this.state.pass
+            }
+            console.log(this.state)
+            axios.post('http://192.168.100.10:3000/api/user', dataUser)
             .then(res => {
                 console.log(res)
-                
+
             })
             .catch(err => {
                 console.log(err)
             })
+        }else{
+            Alert.alert('improve your mail')
+        }
     }
     render() {
         return (
-            <View style={Style.container}>
-                <TextInput
-                    placeholder={"Input Username"}
-                    style={Style.inputText}
-                    onChangeText={(iUser) => {
-                        this.setText('username', iUser)
-                    }}
-                />
-                <TextInput
-                    placeholder={"Input Mail"}
-                    style={Style.inputText}
-                    onChangeText={(iMail) => { this.setText('mail', iMail) }}
-                />
-                <TextInput
-                    placeholder={"Input Password"}
-                    style={Style.inputText}
-                    onChangeText={(iPass) => {
-                        this.setText('pass', iPass)
-                    }}
-                />
-                <Button
-                    onPress={() => {
-                        //this.sendDataUser()
-                        
-                    }}
-                    title="Register"
-                />
-            </View>
+            <Container>
+                <Content style={{ backgroundColor: '#03A9F4' }}>
+                    <Form style={{ padding: 20 }}>
+                        <Item floatingLabel>
+                            <Label style={{ color: 'white' }}>Username</Label>
+                            <Input style={{ color: 'white' }} autoCapitalize onChangeText={(iUsername) => {
+                                this.setState({
+                                    username: iUsername
+                                })
+                            }} />
+                        </Item>
+                        <Item floatingLabel>
+                            <Label style={{ color: 'white' }}>Email</Label>
+                            <Input style={{ color: 'white' }} autoCapitalize={false} onChangeText={(iEmail) => {
+                                this.setState({
+                                    email: iEmail
+                                })
+                            }} />
+                        </Item>
+                        <Item floatingLabel last>
+                            <Label style={{ color: 'white' }}>Password</Label>
+                            <Input style={{ color: 'white' }} secureTextEntry autoCapitalize={false} onChangeText={(iPassword) => {
+                                this.setState({
+                                    password: iPassword
+                                })
+                            }} />
+                        </Item>
+                        <Text></Text>
+                        <Button style={{ backgroundColor: 'white', color: '#4CAF50' }} block transparent primary onPress={() => {
+                            this.sendDataUser()
+                        }}>
+                            <Text style={{ color: '#03A9F4', fontWeight: 'bold' }}>Register</Text>
+                        </Button>
+                    </Form>
+                </Content>
+            </Container>
         )
     }
 }
