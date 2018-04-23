@@ -12,6 +12,7 @@ export default class TabView extends Component {
     this.state={
       items:[]
     }
+   this.getItem  = this.getItem.bind(this)
   }
   
   componentDidMount(){
@@ -24,6 +25,7 @@ export default class TabView extends Component {
         this.setState({
             items: JSON.parse(resData)
         })
+        console.log(resData,' INI DATA TAB VIEW')
     })
   }
   
@@ -35,10 +37,10 @@ export default class TabView extends Component {
           this.getItem()  
           }>
           <Tab heading="Products">
-            <TabProducts navigation={this.props.navigation } items={this.state.items}/>
+            <TabProducts navigation={this.props.navigation } items={this.state.items} getItem={this.getItem}/>
           </Tab>
           <Tab heading="Cart">
-            <TabCart navigation={this.props.navigation} items={this.state.items}/>
+            <TabCart navigation={this.props.navigation} items={this.state.items} getItem={this.getItem}/>
           </Tab>
           <Tab heading="Profile">
             <TabProfile navigation={this.props.navigation}/>

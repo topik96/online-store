@@ -42,7 +42,6 @@ export default class CartList extends React.Component {
       item: this.state.item
     })
     this.props.getSubTotal(qty * this.props.item.price)
-
   }
 
   render() {
@@ -63,6 +62,7 @@ export default class CartList extends React.Component {
                   },
                   {
                     text: "OK", onPress: () => {
+
                       AsyncStorage.getItem('itemInCart')
                         .then(res => {
                           let data = JSON.parse(res)
@@ -74,6 +74,7 @@ export default class CartList extends React.Component {
                               item: product
                             })
                             AsyncStorage.setItem('itemInCart', JSON.stringify(product))
+                            this.props.getItem()
                           }
                         })
                     }

@@ -1,8 +1,17 @@
 import React from 'react'
 import {
-    View, TextInput, Alert, Image, AsyncStorage, ScrollView
+    View,
+    TextInput,
+    Alert,
+    Image,
+    AsyncStorage,
+    ScrollView
 } from 'react-native'
-import { Text, Header, Button, Toast, Thumbnail, ListItem, List, Body, Right, Left, Icon, Item, Input } from 'native-base'
+import {
+    Text,
+    Header,
+    Button, Toast, Thumbnail, ListItem, List, Body, Right, Left, Icon, Item, Input
+} from 'native-base'
 import { StackNavigator } from 'react-navigation'
 import CartList from '../pages/CartList'
 export default class Cart extends React.Component {
@@ -32,7 +41,7 @@ export default class Cart extends React.Component {
     showCart() {
         if (this.props.items !== null) {
             return this.props.items.map((item) => {
-                return <CartList item={item} key={item.id} getSubTotal={this.getSubTotal} />
+                return <CartList item={item} key={item.id} getSubTotal={this.getSubTotal} getItem={this.props.getItem} />
             })
         } else {
             return <Text>No items selected</Text>
@@ -54,12 +63,9 @@ export default class Cart extends React.Component {
         return 0
     }
 
-    sendPayment(){
+    sendPayment() {
         let total = this.totalPaid()
-        let number = Math.random()
-        let idOrder = 'TPKP' + number.toString().substring(3, 9)
-        return AsyncStorage.setItem('checkout', JSON.stringify({ 'id': idOrder, 'total': this.totalPaid() }))
-        
+        return AsyncStorage.setItem('checkout', total.toString())
     }
 
     render() {
@@ -69,8 +75,13 @@ export default class Cart extends React.Component {
                 <Header>
                     <Right>
                         <Button transparent danger onPress={() => {
-                            this.props.navigation.navigate('Checkout')
-                            this.sendPayment()
+                            if (this.totalPaid()!==0){
+                                this.sendPayment()
+                                this.props.navigation.navigate('Checkout')
+                            }else{
+                                Alert.alert('cart is null')
+                            }
+
                         }}>
                             <Text>Checkout</Text>
                         </Button>

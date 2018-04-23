@@ -30,20 +30,19 @@ class ButtonCustom extends Component {
         console.log(' from bqty' + this.state.quantity)
         return (
             <View>
-                <Button transparent onPress={() => {
+                <Button style={{padding:3}} transparent onPress={() => {
                     this.increment()
                 }}>
-                    <Text style={{ color: 'blue', fontSize: 15 }}>
+                    <Text style={{ color: 'blue', fontSize: 25,fontWeight:'bold'}}>
                         +</Text>
                 </Button>
-                <Text>{this.state.quantity}</Text>
-                <Button transparent onPress={() => {
+                <Text style={{ fontSize: 15 }}> {this.state.quantity}</Text>
+                <Button style={{padding:3}} transparent onPress={() => {
                     this.decrement()
                 }} >
-                    <Text style={{ color: 'blue' }}>
+                    <Text style={{ color: 'blue', fontSize: 25,fontWeight:'bold' }}>
                         -</Text>
                 </Button>
-
             </View>
         )
     }

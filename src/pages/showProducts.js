@@ -19,18 +19,8 @@ export default class ShowProducts extends React.Component {
         this.getQTY = this.getQTY.bind(this)
     }
 
-    UNSAFE_componentWillMount() {
+    componentDidMount() {
         this.fetchData().done()
-        AsyncStorage.getItem('itemInCart')
-            .then(resData => {
-                if (resData == null) {
-                    console.log('kosong')
-                } else {
-                    this.setState({
-                        tempCart: JSON.parse(resData)
-                    })
-                }
-            })
     }
 
     async fetchData() {
@@ -63,26 +53,25 @@ export default class ShowProducts extends React.Component {
     }
 
     findId(id, name, price, qty) {
-        let a = this.state.tempCart.find(arr => {
+        let a = this.props.items.find(arr => {
             return arr.id == id
         })
         if (a) {
             console.log('item is added to cart')
         } else {
             console.log(qty + ' fiebifebfiebeifbeif')
-            if (qty != undefined) {
+            if (qty > 0) {
                 console.log(qty + ' fiebifebfiebeifbeif')
-                this.state.tempCart.push({ 'id': id, 'name': name, 'price': price, 'quantity': qty })
-                AsyncStorage.setItem('itemInCart', JSON.stringify(this.state.tempCart))
+                this.props.items.push({ 'id': parseInt(id), 'name': name, 'price': price, 'quantity': qty,'stock':3 })
+                AsyncStorage.setItem('itemInCart', JSON.stringify(this.props.items))
                     .then(res => {
                         this.showToast('Added to cart', 2000, 'primary')
                     })
             } else {
-                this.showToast('Add quantity', 1000,'danger')
+                this.showToast('Add quantity', 1000, 'danger')
             }
         }
     }
-
     showProducts() {
         if (this.state.dataProducts.length === 0) {
             return <ActivityIndicator size='large' />
@@ -90,7 +79,7 @@ export default class ShowProducts extends React.Component {
             return this.state.dataProducts.map(item => {
                 if (item.name.toLowerCase().includes(this.state.productName.toLowerCase())) {
                     if (item.stock > 0) {
-                        return <List key={item.id} >
+                        return <List key={item.id} style={{marginBottom:35}}>
                             <ListItem style={{ backgroundColor: 'white' }} onLongPress={() => {
                                 Alert.alert('Loading Image...')
                             }}>
@@ -101,7 +90,6 @@ export default class ShowProducts extends React.Component {
                                     <Text note>${item.price}</Text>
                                     <Button transparent onPress={() => {
                                         this.findId(item.id, item.name, item.price, item.quantity)
-
                                     }}>
                                         <Text>Buy</Text>
                                     </Button>
@@ -128,11 +116,6 @@ export default class ShowProducts extends React.Component {
     }
 
     render() {
-
-        this.state.dataProducts.map(item => {
-            console.log('id :', item.id, ' qty: ', item.quantity)
-        })
-        console.log(this.state.tempCart)
         return (
             <View>
                 <Header searchBar rounded>
