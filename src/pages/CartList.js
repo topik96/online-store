@@ -34,9 +34,7 @@ export default class CartList extends React.Component {
   }
 
   setQuantity(qty = 1) {
-
     this.props.getSubTotal(0)
-
     this.state.item.quantity = parseInt(qty)
     this.setState({
       item: this.state.item
@@ -50,7 +48,7 @@ export default class CartList extends React.Component {
       return (
         <List>
           <ListItem
-            onLongPress={() => {
+            onPress={() => {
               Alert.alert(
                 "Confirm",
                 "Delete item",
@@ -86,6 +84,8 @@ export default class CartList extends React.Component {
           >
             <Right>
               <TextInput
+                disable
+                style={{ fontSize: 20, marginRight: 30 }}
                 onChangeText={(qty) => this.setQuantity(item.quantity)}
                 defaultValue={JSON.stringify(item.quantity)}
               />

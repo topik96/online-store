@@ -43,8 +43,6 @@ export default class Cart extends React.Component {
             return this.props.items.map((item) => {
                 return <CartList item={item} key={item.id} getSubTotal={this.getSubTotal} getItem={this.props.getItem} />
             })
-        } else {
-            return <Text>No items selected</Text>
         }
     }
 
@@ -59,8 +57,9 @@ export default class Cart extends React.Component {
         if (this.props.items !== null) {
             let total = this.props.items.length > 0 ? this.props.items.map(item => item.quantity * item.price).reduce((a, b) => a + b) : 0
             return total
+        } else {
+            return 0
         }
-        return 0
     }
 
     sendPayment() {
@@ -75,13 +74,11 @@ export default class Cart extends React.Component {
                 <Header>
                     <Right>
                         <Button transparent danger onPress={() => {
-                            if (this.totalPaid()!==0){
+                            if (this.totalPaid() !== 0) {
                                 this.sendPayment()
                                 this.props.navigation.navigate('Checkout')
-                            }else{
-                                Alert.alert('cart is null')
-                            }
-
+                            } else Alert.alert('cart is null')
+                            
                         }}>
                             <Text>Checkout</Text>
                         </Button>
@@ -89,8 +86,11 @@ export default class Cart extends React.Component {
                 </Header>
                 <ScrollView>
                     {this.showCart()}
-                    <Text style={{ marginRight: 10 }}>Total Paid : ${this.totalPaid()}</Text>
+                    <View style={{ height: 40, backgroundColor: '#03A9F4',paddingTop:10 }}>
+                        <Text style={{ textAlign: 'center', color: 'white', fontWeight: 'bold' }}>Total ${this.totalPaid()}</Text>
+                    </View>
                 </ScrollView>
+
             </View>
         )
     }

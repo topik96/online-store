@@ -19,19 +19,21 @@ export default class Register extends Component {
         })
     }
     sendDataUser() {
-        let validateEmail = /\S+@\S+\.\S+/.test(this.state.email);
+        let validateEmail = /\S+@\S+\.\S+/.test(this.state.mail);
         if (validateEmail){
             this.props.navigation.navigate('Login')
             const dataUser = {
                 username: this.state.username,
+                
+                password: this.state.pass,
+               
                 email: this.state.mail,
-                password: this.state.pass
+                
             }
             console.log(this.state)
-            axios.post('http://192.168.100.10:3000/api/user', dataUser)
+            axios.post('http://192.168.100.10:3000/api/users/register', dataUser)
             .then(res => {
                 console.log(res)
-
             })
             .catch(err => {
                 console.log(err)
@@ -47,7 +49,7 @@ export default class Register extends Component {
                     <Form style={{ padding: 20 }}>
                         <Item floatingLabel>
                             <Label style={{ color: 'white' }}>Username</Label>
-                            <Input style={{ color: 'white' }} autoCapitalize onChangeText={(iUsername) => {
+                            <Input style={{ color: 'white' }} autoCapitalize={false} onChangeText={(iUsername) => {
                                 this.setState({
                                     username: iUsername
                                 })
@@ -57,7 +59,7 @@ export default class Register extends Component {
                             <Label style={{ color: 'white' }}>Email</Label>
                             <Input style={{ color: 'white' }} autoCapitalize={false} onChangeText={(iEmail) => {
                                 this.setState({
-                                    email: iEmail
+                                    mail: iEmail
                                 })
                             }} />
                         </Item>
@@ -65,13 +67,14 @@ export default class Register extends Component {
                             <Label style={{ color: 'white' }}>Password</Label>
                             <Input style={{ color: 'white' }} secureTextEntry autoCapitalize={false} onChangeText={(iPassword) => {
                                 this.setState({
-                                    password: iPassword
+                                    pass: iPassword
                                 })
                             }} />
                         </Item>
                         <Text></Text>
                         <Button style={{ backgroundColor: 'white', color: '#4CAF50' }} block transparent primary onPress={() => {
                             this.sendDataUser()
+                           
                         }}>
                             <Text style={{ color: '#03A9F4', fontWeight: 'bold' }}>Register</Text>
                         </Button>

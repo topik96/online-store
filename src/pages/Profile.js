@@ -20,7 +20,7 @@ export default class Profile extends Component {
     constructor() {
         super()
         this.state = {
-            id: 54,
+            id: 0,
             email: '',
             username: '',
             name: '',
@@ -33,48 +33,40 @@ export default class Profile extends Component {
 
     }
 
-
-
-    componentDidMount() {
-        setTimeout(() => {
-            this.setTimePassed();
-        }, 1000);
-    }
-
-
-
     setTimePassed() {
         this.setState({ timePassed: true });
     }
-    UNSAFE_componentWillMount() {
-        console.log('============================================ID')
-        axios.get(`http://192.168.100.29:5000/api/users/${this.state.id}`)
-            .then(res => {
-                if (res == null) {
-                    return <ActivityIndicator size='large' />
-                } else {
-                    this.setState({
-                        username: res.data[0].username,
-                        email: res.data[0].email,
-                        password: res.data[0].password,
-                        phone: res.data[0].phone,
-                        address: res.data[0].address
-                    })
-                }
 
+    componentWillMount() {
+        AsyncStorage.getItem('idUser')
+            .then(res => {
+                console.log(res,'IBEJPHJVOBIVHIOHVHJOHIHVJHOHVJOHUVHJVHIUOIVJGHIUVHJGVIUVHJ G')
+                axios.get(`http://192.168.100.10:3000/api/users/?id=${res}`)
+                    .then(res => {
+                        this.setState({
+                            id:res.data[0].id,
+                            username: res.data[0].username,
+                            email: res.data[0].email,
+                            password: res.data[0].password,
+                            phone: res.data[0].phone,
+                            address: res.data[0].address
+                        })
+                    })
             })
+            setTimeout(() => {
+                this.setTimePassed();
+            }, 1000);
     }
 
-
     putData() {
-        axios.put(`http://192.168.100.29:5000/api/users/${this.state.id}`, {
+        axios.put(`http://192.168.100.10:3000/api/users/${this.state.id}`, {
             username: this.state.username,
             password: this.state.password,
             phone: this.state.phone,
             address: this.state.address
         })
-            .then(res => {
-                console.log(res)
+            .then(e=> {
+                console.log(e)
             })
     }
 
@@ -84,28 +76,42 @@ export default class Profile extends Component {
                 AsyncStorage.removeItem('totalPaid')
                 AsyncStorage.removeItem('idUser')
                 AsyncStorage.removeItem('login')
-              //  AsyncStorage.removeItem('itemInCart')
                 this.props.navigation.navigate('Login')
             }}>
                 <Text>Logout</Text>
             </Button>
-
         } else {
             return <Button style={{ padding: 20 }} primary block onPress={() => {
-                this.putData(this.state.id)
+                this.putData()
                 this.setState({
                     disableInput: true
                 })
             }}>
                 <Text>Submit</Text>
             </Button>
-
         }
     }
 
     render() {
         if (!this.state.timePassed) {
-            return <ActivityIndicator style={{marginTop:250}} size='large' />;
+            return <Container>
+                <Header>
+                    <Body >
+
+                    </Body>
+                    <Text style={{ marginRight: 10, marginTop: 15 }}>Profile</Text>
+                    <Right>
+                        <Button transparent onPress={() => {
+                            this.setState({
+                                disableInput: false
+                            })
+                        }}>
+                            <Text>Edit</Text>
+                        </Button>
+                    </Right>
+                </Header>
+                <ActivityIndicator style={{ marginTop: 250 }} size='large' />;
+                 </Container>
         } else {
             return (
                 <Container>
@@ -141,7 +147,7 @@ export default class Profile extends Component {
                             </Item>
                             <Item floatingLabel last>
                                 <Label>Email</Label>
-                                <Input autoCapitalize='none' disabled={this.state.disableInput} value={this.state.email}
+                                <Input autoCapitalize='none' disabled={true} value={this.state.email}
                                     onChangeText={(txt) => {
                                         this.setState({
                                             email: txt

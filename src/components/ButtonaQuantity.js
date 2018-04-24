@@ -1,5 +1,5 @@
 import React, { Component } from 'React'
-import { Button, Left, Right, Body } from 'native-base'
+import { Button, Left, Right, Body,Icon,Content } from 'native-base'
 import { View, Text } from 'react-native'
 import Cart from '../pages/Cart'
 class ButtonCustom extends Component {
@@ -29,21 +29,19 @@ class ButtonCustom extends Component {
     render() {
         console.log(' from bqty' + this.state.quantity)
         return (
-            <View>
-                <Button style={{padding:3}} transparent onPress={() => {
+            <Content>
+                <Button transparent onPress={() => {
                     this.increment()
                 }}>
-                    <Text style={{ color: 'blue', fontSize: 25,fontWeight:'bold'}}>
-                        +</Text>
+                    <Icon name="md-arrow-dropup"/>
                 </Button>
-                <Text style={{ fontSize: 15 }}> {this.state.quantity}</Text>
-                <Button style={{padding:3}} transparent onPress={() => {
+                <Text style={{ fontSize: 15,paddingLeft:17 }}>{this.state.quantity}</Text>
+                <Button transparent onPress={() => {
                     this.decrement()
                 }} >
-                    <Text style={{ color: 'blue', fontSize: 25,fontWeight:'bold' }}>
-                        -</Text>
+                    <Icon name="md-arrow-dropdown"/>
                 </Button>
-            </View>
+            </Content>
         )
     }
 }

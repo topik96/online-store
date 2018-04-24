@@ -21,6 +21,11 @@ export default class ShowProducts extends React.Component {
 
     componentDidMount() {
         this.fetchData().done()
+        AsyncStorage.getItem('idUser')
+        .then(res=>{
+            console.log(res,'===========================================================')
+        })
+        console.log(this.props.items,'efefeefef')
     }
 
     async fetchData() {
@@ -52,38 +57,56 @@ export default class ShowProducts extends React.Component {
         })
     }
 
+    addToCart(id, name, price, qty) {
+        this.props.items.push({ 'id': parseInt(id), 'name': name, 'price': price, 'quantity': qty, 'stock': 3 })
+        AsyncStorage.setItem('itemInCart', JSON.stringify(this.props.items))
+            .then(res => {
+                this.showToast('Added to cart', 2000, 'primary')
+            })
+    }
+
     findId(id, name, price, qty) {
-        let a = this.props.items.find(arr => {
-            return arr.id == id
-        })
-        if (a) {
-            console.log('item is added to cart')
-        } else {
-            console.log(qty + ' fiebifebfiebeifbeif')
-            if (qty > 0) {
-                console.log(qty + ' fiebifebfiebeifbeif')
-                this.props.items.push({ 'id': parseInt(id), 'name': name, 'price': price, 'quantity': qty,'stock':3 })
-                AsyncStorage.setItem('itemInCart', JSON.stringify(this.props.items))
-                    .then(res => {
-                        this.showToast('Added to cart', 2000, 'primary')
-                    })
+        let a = []
+        if (this.props.items !== null) {
+            a = this.props.items.find(arr => {
+                return arr.id == id
+            })
+            if (a) {
+                console.log('added to cart')
             } else {
+                if (qty > 0) {
+                    this.props.items.push({ 'id': parseInt(id), 'name': name, 'price': price, 'quantity': qty, 'stock': 3 })
+                    AsyncStorage.setItem('itemInCart', JSON.stringify(this.props.items))
+                        .then(res => {
+                            this.showToast('Added to cart', 2000, 'primary')
+                        })
+                } else {
+                    this.showToast('Add quantity', 1000, 'danger')
+                }
+            }
+        } else {
+            if (qty>0){
+                AsyncStorage.setItem('itemInCart', JSON.stringify([{ 'id': parseInt(id), 'name': name, 'price': price, 'quantity': qty, 'stock': qty }]))
+                .then(res => {
+                    this.showToast('Added to cart', 2000, 'primary')
+                })
+            }else{
                 this.showToast('Add quantity', 1000, 'danger')
             }
         }
     }
     showProducts() {
         if (this.state.dataProducts.length === 0) {
-            return <ActivityIndicator size='large' />
+            return <ActivityIndicator style={{paddingTop:240}} size='large' />
         } else {
             return this.state.dataProducts.map(item => {
                 if (item.name.toLowerCase().includes(this.state.productName.toLowerCase())) {
                     if (item.stock > 0) {
-                        return <List key={item.id} style={{marginBottom:35}}>
+                        return <List key={item.id}>
                             <ListItem style={{ backgroundColor: 'white' }} onLongPress={() => {
                                 Alert.alert('Loading Image...')
                             }}>
-                                <Thumbnail square size={80} source={{ uri: "https://cdn.pixabay.com/photo/2013/04/06/11/50/image-editing-101040_960_720.jpg" }} />
+                                <Thumbnail square large source={{ uri: "https://cdn.pixabay.com/photo/2013/04/06/11/50/image-editing-101040_960_720.jpg" }} />
                                 <Body>
                                     <Text>{item.name}</Text>
                                     <Text note>{item.description}</Text>
@@ -94,7 +117,6 @@ export default class ShowProducts extends React.Component {
                                         <Text>Buy</Text>
                                     </Button>
                                 </Body>
-
                                 <Right>
                                     <ButtonQuantity quantity={this.getQTY} id={item.id} />
                                 </Right>
@@ -127,12 +149,12 @@ export default class ShowProducts extends React.Component {
                     </Item>
                 </Header>
                 <ScrollView>
-                    <Content padder>
-                        <Card>
+                   
+                       
                             {this.alertFoundItem()}
                             {this.showProducts()}
-                        </Card>
-                    </Content>
+                        
+                    
                 </ScrollView>
             </View>
         )

@@ -45,9 +45,10 @@ export default class Checkout extends React.Component {
                             userID: r.data[0].id,
                             username: r.data[0].username,
                             phone: r.data[0].phone,
-                            address: r.data[0].address
+                            address: r.data[0].address,
+                            email:r.data[0].email
                         })
-                        console.log(r.data[0].phone + ' address ' + r.data[0].address)
+                        console.log(r.data[0].username+ ' address ' + r.data[0].address,'================')
                     })
             })
 
@@ -73,6 +74,7 @@ export default class Checkout extends React.Component {
         let data = {
             "users_id": parseInt(this.state.userID),
             "data": this.state.tempCart,
+            "email":this.state.email,
             "total": this.state.paymentOrder
         }
 
@@ -84,7 +86,6 @@ export default class Checkout extends React.Component {
                 console.log(err + ' gan')
             })
     }
-
     render() {
         return (
             <Container>
@@ -99,6 +100,7 @@ export default class Checkout extends React.Component {
                                     {
                                         text: 'OK', onPress: () => {
                                             this.props.navigation.navigate('TabView')
+                                            AsyncStorage.removeItem('itemInCart')
                                         }
                                     },
                                 ],
@@ -127,7 +129,7 @@ export default class Checkout extends React.Component {
                             <Button full primary onPress={() => {
                                 this.requestRedirectUrl()
                             }}>
-                                <Text>                           Confirm                             </Text>
+                                <Text>                           Confirm                                   </Text>
                             </Button>
                         </CardItem>
                     </Card>
