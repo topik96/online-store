@@ -64,7 +64,7 @@ export default class Login extends Component {
               </Item>
               <Text></Text>
               <Button style={{ backgroundColor: 'white', color: '#4CAF50' }} block transparent primary onPress={() => {
-                // this.loginValidation()
+                this.loginValidation()
                 navigate('TabView')
               }}>
                 <Text style={{ color: '#03A9F4', fontWeight: 'bold' }}>Login</Text>
