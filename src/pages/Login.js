@@ -1,16 +1,14 @@
 import axios from 'axios'
 import React, { Component } from 'react';
 import {
-  Platform, StyleSheet, Text, View, AppRegistry, TextInput, Button, Alert, TouchableOpacity, AsyncStorage
+  Platform, StyleSheet, Text, View,ImageBackground, Image, Alert, AsyncStorage
 } from 'react-native';
-import { Content } from 'native-base'
-import Style from './style/style'
-
+import { Content, Button, Item, Input, Container, Form, Label, Header, Body } from 'native-base'
 export default class Login extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      mail: '', password: '', token: ''
+      username: '', password: '', token: ''
     }
   }
   setText(key, string) {
@@ -23,8 +21,8 @@ export default class Login extends Component {
   }
 
   loginValidation() {
-    axios.post('http://192.168.100.29:5000/api/users/auth', {
-      username: this.state.mail,
+    axios.post('http://192.168.100.10:3000/api/users/auth', {
+      username: this.state.username,
       password: this.state.password
     })
       .then(res => {
@@ -36,42 +34,50 @@ export default class Login extends Component {
         } else Alert.alert('Username or password inccorect')
       })
       .catch(err => {
-        console.log('error cu' + err)
+        
       })
   }
 
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <View style={Style.container}>
-        
-          <TextInput
-            autoCapitalize
-            placeholder={"Input Mail"}
-            style={Style.inputText}
-            onChangeText={(text) => this.setText('mail', text)} />
-          <Text>{this.state.text}</Text>
-          <TextInput
-            autoCapitalize
-            placeholder={"Input Password"}
-            secureTextEntry={true}
-            style={Style.inputText}
-            onChangeText={pw => this.setText('password', pw)} />
-          <Button
-            onPress={() => {
-              this.loginValidation()
-            }}
-            title="Sign In" />
-          <Button
-            onPress={() => {
-              navigate('Register')
-              AsyncStorage.removeItem('itemInCart')
-            }}
-            title="Register" />
+      <Container style={{backgroundColor:'#03A9F4'}} >
        
-      </View>
+          <Content style={{ padding: 30 }}>
+            <Form style={{ marginTop: 80 }}>
+              <Image style={{ width: 185, height: 170, marginLeft: 60 }} source={require('../images/login_logo.png')} />
+              <Item floatingLabel last>
+                <Label style={{ color: 'white' }}>Username</Label>
+                <Input style={{ color: 'white' }} autoCapitalize={false} onChangeText={(iUsername) => {
+                  this.setState({
+                    username: iUsername
+                  })
+                }} />
+              </Item>
+              <Item floatingLabel last>
+                <Label style={{ color: 'white' }}>Password</Label>
+                <Input style={{ color: 'white' }} secureTextEntry autoCapitalize={false} onChangeText={(iPassword) => {
+                  this.setState({
+                    password: iPassword
+                  })
+                }} />
+              </Item>
+              <Text></Text>
+              <Button style={{ backgroundColor: 'white', color: '#4CAF50' }} block transparent primary onPress={() => {
+                this.loginValidation()
+                navigate('TabView')
+              }}>
+                <Text style={{ color: '#03A9F4', fontWeight: 'bold' }}>Login</Text>
+              </Button>
+              <Text></Text>
+              <Button style={{ backgroundColor: 'white' }} block transparent onPress={() => {
+                navigate('Register')
+              }}>
+                <Text style={{ color: '#03A9F4', fontWeight: 'bold' }}>Register</Text>
+              </Button>
+            </Form>
+          </Content>
+      </Container>
     )
   }
 }
-
-

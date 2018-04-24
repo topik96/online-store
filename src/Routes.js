@@ -45,7 +45,9 @@ const Nav = StackNavigator({
             header: null
         }
     },
-    Payment: { screen: Payment }
+    Payment: { screen: Payment,navigationOptions:{
+        title:'Payment Proccess'
+    } }
 })
 
 
